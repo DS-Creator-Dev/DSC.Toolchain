@@ -2,7 +2,7 @@
   "profiles": {
     "DSC.Toolchain.AssetBuild": {
       "commandName": "Project",
-      "commandLineArgs": "-iC:\\Users\\NotImpLife\\Desktop\\magma_texture.8bpp.png -hroa_magma_texture8.h -sroa_magma_texture8.s"
+      "commandLineArgs": "-iC:\\Users\\NotImpLife\\Desktop\\rainbow.png -hrainbow8.h -srainbow8.s"
     }
   }
 }

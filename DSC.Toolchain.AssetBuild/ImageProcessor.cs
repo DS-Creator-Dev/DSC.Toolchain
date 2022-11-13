@@ -96,34 +96,44 @@ namespace DSC.Toolchain.AssetBuild
 
                 foreach (var b in buckets)
                 {
-                    Console.WriteLine("Bucket");
-                    Console.WriteLine("[" + string.Join(", ", b.Items.Select(c => c.ToHex())) + "]");
-                    Console.WriteLine(b.Average.ToHex());
+                    //Console.WriteLine("Bucket");
+                    //Console.WriteLine("[" + string.Join(", ", b.Items.Select(c => c.ToHex())) + "]");
+                    //Console.WriteLine(b.Average.ToHex());
                 }
 
                 if (buckets.Count == (1<<options._ColorDepth))
                 {
+                    Console.WriteLine("HERE?");
                     buckets = buckets.MergeClosestTwo();
+                    Console.WriteLine(buckets.Count);
                 }
 
                 pal = new short[1 + buckets.Count];
 
 
                 Dictionary<Rgba32, short> colors16 = new Dictionary<Rgba32, short>();
+                Dictionary<short, int> davg = new Dictionary<short, int>();
 
                 buckets.ToList().ForEach(bucket=>
                     {
                         short avg = bucket.Average.ToBGR15();
-                        Console.WriteLine("AVG = " + avg.ToString("X4"));
+                        //Console.WriteLine("AVG = " + avg.ToString("X4"));
+                        davg[avg] = 1;
                         bucket.Items.ForEach(color => colors16[color] = avg);
                     });
+
+                for(int i=0;i<davg.Keys.ToList().Count;i++)
+                {
+                    short key = davg.Keys.ToList()[i];
+                    pal[i + 1] = key;
+                    davg[key] = i + 1;
+                }
 
                 pal[0] = options._TransparentColor.ToBGR15();
                 var keys16 = colors16.Keys.ToList();
                 for (int i = 0; i < keys16.Count; i++) 
                 {
-                    pal[i + 1] = colors16[keys16[i]];
-                    colors16[keys16[i]] = (short)(i + 1);
+                    colors16[keys16[i]] = (short)(davg[colors16[keys16[i]]]);
                 }
                 colors16[options._TransparentColor] = 0;
 

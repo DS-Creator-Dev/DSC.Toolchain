@@ -66,21 +66,23 @@ namespace DSC.Toolchain.AssetBuild
             }
 
             int p1 = 0, p2 = 0;
-            int min = 255 * 255 * 3;
+            int min = 256 * 256 * 3;
 
-            for(int i=0;i<buckets.Count;i++)
+            for (int i = 0; i < buckets.Count - 1; i++) 
             {
-                for (int j = i + 1; i < buckets.Count; i++)
+                for (int j = i + 1; j < buckets.Count; j++) 
                 {
-                    int d = distance(buckets[i].Average, buckets[j].Average);
+                    int d = distance(buckets[i].Average, buckets[j].Average);                    
                     if(d<min)
                     {
+                        Console.WriteLine($"{d}: {i}, {j}");
                         min = d;
                         p1 = i;
                         p2 = j;
                     }
                 }
             }
+            Console.WriteLine($"{p1} {p2}");
 
             result.Add(buckets[p1].Merge(buckets[p2]));
 
