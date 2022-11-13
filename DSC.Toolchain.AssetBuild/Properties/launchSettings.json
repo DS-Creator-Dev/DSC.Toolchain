@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "DSC.Toolchain.AssetBuild": {
+      "commandName": "Project",
+      "commandLineArgs": "C:\\Users\\NotImpLife\\Desktop\\magma_texture.8bpp.png -wram -bitmap test.h test.s"
+    }
+  }
+}
