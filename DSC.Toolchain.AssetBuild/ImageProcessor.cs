@@ -90,7 +90,7 @@ namespace DSC.Toolchain.AssetBuild
                 var colors = Pixels.Unique().ToList();
                 colors.Remove(options._TransparentColor);
 
-                List<Bucket> buckets = new MedianCut(Pixels.Unique().ToList()).Split(1 << options._ColorDepth).ToList();                              
+                List<Bucket> buckets = new MedianCut(Pixels.Unique().ToList()).Split(1 << options._ColorDepth).ToList();                                                                        
 
                 buckets = buckets.Where(b => b.Items.Count > 0).ToList();
 
@@ -142,6 +142,10 @@ namespace DSC.Toolchain.AssetBuild
                 int k = 0;
                 if(!options._Tiles)
                 {
+                    if(options._ColorDepth!=8)
+                    {
+                        throw new ArgumentException("Paletted Bitmap must be 8-bit");
+                    }
                     Console.WriteLine("8-bit bitmap");
                     Console.WriteLine("Palette size = "+pal.Length.ToString());
                     for (int y = 0; y < Height; y++)
@@ -159,6 +163,46 @@ namespace DSC.Toolchain.AssetBuild
                                 gfx[k / 4] |= (short)(index << (4 * (k % 4)));
                                 k++;
                             }
+                        }
+                    }
+                }
+                else
+                {
+                    if ((Width / 8) % options._MetatileWidth != 0 ||
+                        (Height / 8) % options._MetatileHeight != 0)
+                    {
+                        throw new ArgumentException("Bad metatile alignment");
+                    }
+
+                    for (int metay = 0; metay < Height / 8 / options._MetatileHeight; metay++)
+                    {
+                        for (int metax = 0; metax < Width / 8 / options._MetatileWidth; metax++) 
+                        {
+                            for (int ty = 0; ty < options._MetatileHeight; ty++)
+                            {
+                                for (int tx = 0; tx < options._MetatileWidth; tx++)
+                                {
+                                    for (int iy = 0; iy < 8; iy++)
+                                    {
+                                        for (int ix = 0; ix < 8; ix++)
+                                        {
+                                            int x = (metax * options._MetatileWidth + tx) * 8 + ix;
+                                            int y = (metay * options._MetatileHeight + ty) * 8 + iy;
+                                            short index = colors16[Pixels[y, x]];
+                                            if (options._ColorDepth == 8)
+                                            {
+                                                gfx[k / 2] |= (short)(index << (8 * (k % 2)));
+                                                k++;
+                                            }
+                                            else if (options._ColorDepth == 4)
+                                            {
+                                                gfx[k / 4] |= (short)(index << (4 * (k % 4)));
+                                                k++;
+                                            }
+                                        }
+                                    }
+                                }
+                            }                            
                         }
                     }
                 }
