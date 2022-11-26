@@ -29,7 +29,13 @@ internal partial class Program
             Environment.Exit(-1);
         }
 
-        var options = new ImageProcessorOptions().ColorDepth(get_color_depth(ArgsProc.Instance["color_depth"]));
+        int color_depth = get_color_depth(ArgsProc.Instance["color_depth"]);
+        int metatile_width = int.Parse(ArgsProc.Instance["metatileW"] ?? "1");
+        int metatile_height = int.Parse(ArgsProc.Instance["metatileH"] ?? "1");
+
+        var options = new ImageProcessorOptions()
+            .ColorDepth(color_depth)
+            .Metatile(metatile_width, metatile_height);
 
         if (ArgsProc.Instance["type"] == "bitmap")
             options = options.Bitmap();
@@ -50,6 +56,8 @@ internal partial class Program
         writer.ColorDepth = get_color_depth(ArgsProc.Instance["color_depth"]);
         writer.Data = data.ToShorts();
         writer.IsFile = ArgsProc.Instance["save"] == "file";
+        writer.MetatileWidth = metatile_width;
+        writer.MetatileHeight = metatile_height;
 
         writer.WriteHeader(ArgsProc.Instance["header"]);
         writer.WriteAssembly(ArgsProc.Instance["asm"]);

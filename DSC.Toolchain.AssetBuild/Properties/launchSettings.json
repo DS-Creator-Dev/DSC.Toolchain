@@ -2,7 +2,7 @@
   "profiles": {
     "DSC.Toolchain.AssetBuild": {
       "commandName": "Project",
-      "commandLineArgs": "-iC:\\Users\\NotImpLife\\Desktop\\rainbow.png -hrainbow8.h -srainbow8.s"
+      "commandLineArgs": "-iC:\\Users\\NotImpLife\\Desktop\\face.png -hface8.h -sface8.s"
     }
   }
 }

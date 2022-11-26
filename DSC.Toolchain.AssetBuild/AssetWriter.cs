@@ -18,8 +18,41 @@ namespace DSC.Toolchain.AssetBuild
         public short[] Data = new short[0];
         public bool IsFile;
 
-        public string? Filename = null;
+        private int _MetatileWidth = 0;
+        private int _MetatileHeight = 0;
 
+        public int MetatileWidth
+        {
+            get { return 1 << _MetatileWidth; }
+            set
+            {
+                if(!(new List<int> { 1, 2, 4, 8 }.Contains(value)))
+                {
+                    Console.WriteLine("Metatile width must be a power of 2");
+                    Environment.Exit(-1);
+                }
+                _MetatileWidth = (int)Math.Log2(value);
+            }
+        }
+
+        public int MetatileHeight
+        {
+            get { return 1 << _MetatileHeight; }
+            set
+            {
+                if (!(new List<int> { 1, 2, 4, 8 }.Contains(value)))
+                {
+                    Console.WriteLine("Metatile height must be a power of 2");
+                    Environment.Exit(-1);
+                }
+                _MetatileHeight = (int)Math.Log2(value);
+            }
+        }
+
+
+
+        public string? Filename = null;
+        
         public void WriteHeader(string path)
         {
             using (StreamWriter writer = new(path))
@@ -43,6 +76,8 @@ namespace DSC.Toolchain.AssetBuild
                 | (1 << 2)                  // ROD_TYPE_ASSET
                 | (IsBitmap ? 1 : 0) << 8   // ROA_IS_BITMAP
                 | (ColorDepthFlag) << 9   // ROA_COLOR_DEPTH
+                | (MetatileWidth) << 11    // ROA_METATILE_WIDTH
+                | (MetatileHeight) << 13   // ROA_METATILE_HEIGHT
                 );
         }
 

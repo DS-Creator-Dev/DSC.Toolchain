@@ -64,6 +64,9 @@ namespace DSC.Toolchain.AssetBuild
             new ArgumentClass("header", "h", new List<string>(), "asset.h"),
             new ArgumentClass("asm", "s", new List<string>(), "asset.s"),
             new ArgumentClass("image", "i", new List<string>()),
+            new ArgumentClass("metatileW", "mw", new List<string>()),
+            new ArgumentClass("metatileH", "mh", new List<string>()),
+            
         });
 
         Dictionary<string, string> data = new Dictionary<string, string>();
