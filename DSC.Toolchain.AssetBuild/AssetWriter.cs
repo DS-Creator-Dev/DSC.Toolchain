@@ -76,8 +76,8 @@ namespace DSC.Toolchain.AssetBuild
                 | (1 << 2)                  // ROD_TYPE_ASSET
                 | (IsBitmap ? 1 : 0) << 8   // ROA_IS_BITMAP
                 | (ColorDepthFlag) << 9   // ROA_COLOR_DEPTH
-                | (MetatileWidth) << 11    // ROA_METATILE_WIDTH
-                | (MetatileHeight) << 13   // ROA_METATILE_HEIGHT
+                | (_MetatileWidth) << 11    // ROA_METATILE_WIDTH
+                | (_MetatileHeight) << 13   // ROA_METATILE_HEIGHT
                 );
         }
 
