@@ -81,13 +81,16 @@ namespace DSC.Toolchain.AssetBuild
             }
         }
 
-        public void LoadArgs(string[] args)
+        public void LoadArgs(string[] args, bool check_asset_file = true, bool init_defaults = true)
         {
-            foreach (var argclass in argclasses)
+            if (init_defaults)
             {
-                if(argclass.Default!=null)
+                foreach (var argclass in argclasses)
                 {
-                    data[argclass.Name] = argclass.Default;
+                    if (argclass.Default != null)
+                    {
+                        data[argclass.Name] = argclass.Default;
+                    }
                 }
             }
             foreach (var arg in args)
@@ -99,6 +102,20 @@ namespace DSC.Toolchain.AssetBuild
                     {
                         data[argclass.Name] = val;
                     }
+                }
+            }
+            if (check_asset_file && data["image"]!=null)
+            {
+                // try load options from attached ".asset" file
+                string asset_opts =
+                    Path.Combine(Path.GetDirectoryName(data["image"]) ?? "",Path.GetFileNameWithoutExtension(data["image"]) + ".asset");
+                Console.WriteLine(asset_opts);
+                if(File.Exists(asset_opts))
+                {
+                    Console.WriteLine("Asset options found");
+                    string content = File.ReadAllText(asset_opts);
+                    string[] opts = content.Split(null); // split by whitespace
+                    LoadArgs(opts, false, false);
                 }
             }
         }

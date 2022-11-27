@@ -43,6 +43,20 @@ Arguments (in this order, do not skip any):
 
     This is be the file that will be loaded from the filesystem.
 
+## How to compile
+
+In Visual Studio's Developer PowerShell, type in one of the following commands depending by target platform (Windows/Linux/Max).
+
+(Self-contained option will produce a larger size binary in order to remove any other dependency issues, we'll see later if it is necessary to keep it that way.)
+
+```dotnet publish -c Release -r win-x64 --self-contained true -p:PublishReadyToRun=true```
+
+```dotnet publish -c Release -r linux-x64 --self-contained true -p:PublishReadyToRun=true```
+
+```dotnet publish -c Release -r osx-x64 --self-contained true -p:PublishReadyToRun=true```
+
+Check the `bin/Release/net6.0/<platform>/publish/` location for the single executable file.
+
 ## Usage example 
 
 To compile an 8-bit PNG into a bitmap asset data that resides in memory, use the command
