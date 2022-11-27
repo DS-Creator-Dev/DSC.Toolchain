@@ -82,3 +82,12 @@ source/image.s
 Makefile
 ```
 
+The image compile options can also be specified in a file that has the same name and path as the image but has the extensions `.asset`.
+
+File `path/to/image.8bpp.asset` contains text `-wram -bitmap`.
+
+Command
+
+`AssetBuild path/to/image.8bpp.png image.h image.s`
+
+... and AssetBuild knows to extracts the options `-wram -bitmap` from the file.
